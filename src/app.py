@@ -8,6 +8,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
+from langchain.llms import HuggingFaceHub
 
 
 def get_pdf_text(pdf_docs):
@@ -31,16 +32,25 @@ def get_text_chunks(text):
 
 def get_vectorstore(text_chunks):
     print("Getting embeddings.")
+
+    # initialise embeddings model
     embeddings = OpenAIEmbeddings()
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+
     print("Creating vector store.")
+
+    # initialise vector store
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
 
 def get_conversation_chain(vectorstore):
     print("Getting conversation chain.")
+
+    # initialise language model
     llm = ChatOpenAI()
+    # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature": 0.5, "max_length": 512},)
+
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm, retriever=vectorstore.as_retriever(), memory=memory
@@ -49,10 +59,16 @@ def get_conversation_chain(vectorstore):
 
 
 def handle_userinput(user_question):
+    print("Processing user input.")
+
+    # add the user's question to the response
     response = st.session_state.conversation({"question": user_question})
-    # store and display chat history
+
+    # add the response to chat history
     st.session_state.chat_history = response["chat_history"]
-    for i, message in enumerate[st.session_state.chat_history]:
+
+    # display the chat history
+    for i, message in enumerate(st.session_state.chat_history):
         if i % 2 == 0:
             st.write(
                 user_template.replace("{{MSG}}", message.content),
@@ -60,8 +76,7 @@ def handle_userinput(user_question):
             )
         else:
             st.write(
-                bot_template.replace("{{MSG}}", message.content),
-                unsafe_allow_html=True,
+                bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True
             )
 
 
@@ -73,12 +88,6 @@ def main():
     st.set_page_config(
         page_title="Chat with the Data Stories Archive", page_icon=":books:"
     )
-    st.header("Chat with Data Stories :books:")
-
-    # handle user input
-    user_question = st.text_input("Ask a question about housing, property or planning:")
-    if user_question:
-        handle_userinput(user_question)
 
     # add css styling
     st.write(css, unsafe_allow_html=True)
@@ -88,6 +97,14 @@ def main():
         st.session_state.conversation = None
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
+
+    # set header
+    st.header("Chat with Data Stories :books:")
+
+    # handle user input
+    user_question = st.text_input("Ask a question about housing, property or planning:")
+    if user_question:
+        handle_userinput(user_question)
 
     # create sidebar
     with st.sidebar:
