@@ -86,7 +86,7 @@ def main():
 
     # configure Streamlit page
     st.set_page_config(
-        page_title="Chat with the Data Stories Archive", page_icon=":books:"
+        page_title="Chat with the Data Stories Archive", page_icon=":house:"
     )
 
     # add css styling
@@ -99,7 +99,7 @@ def main():
         st.session_state.chat_history = None
 
     # set header
-    st.header("Chat with Data Stories :books:")
+    st.header("Chat with Data Stories :house:")
 
     # handle user input
     user_question = st.text_input("Ask a question about housing, property or planning:")
@@ -111,7 +111,7 @@ def main():
         st.subheader("Your documents")
         # store user submitted documents
         pdf_docs = st.file_uploader(
-            "Upload your documents here and click on ''Process'",
+            "Upload your documents here and click on 'Process'",
             accept_multiple_files=True,
         )
         # process documents
