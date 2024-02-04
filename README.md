@@ -1,4 +1,4 @@
-# DS LLM Chatbot
+# DS LLM Planning Chatbot
 A Python application providing a LLM powered chatbot for interacting with text-based interviews and academic papers.
 
 ## Run Application
