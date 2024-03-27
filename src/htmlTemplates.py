@@ -28,7 +28,7 @@ css = """
 bot_template = """
 <div class="chat-message bot">
     <div class="avatar">
-        <img src="https://www.hopectr.org/wp-content/uploads/2022/11/blank-avatar-icon-35.png">
+        <img src="https://www.svgrepo.com/show/105517/user-icon.svg">
     </div>
     <div class="message">{{MSG}}</div>
 </div>
@@ -37,7 +37,7 @@ bot_template = """
 user_template = """
 <div class="chat-message user">
     <div class="avatar">
-        <img src="https://www.hopectr.org/wp-content/uploads/2022/11/blank-avatar-icon-35.png">
+        <img src="https://www.svgrepo.com/show/105517/user-icon.svg">
     </div>    
     <div class="message">{{MSG}}</div>
 </div>
